@@ -9,6 +9,10 @@ const WaiverPage: React.FC = () => {
         // Add logic to handle waiver signing, e.g., API call
     };
 
+    const goToConfirm = () => {
+        window.location.href = '/first-time-customer/create-account/confirmation';
+    }
+
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
             <div className="bg-white shadow-md rounded-lg p-6 max-w-lg w-full">
@@ -36,6 +40,7 @@ const WaiverPage: React.FC = () => {
                 >
                     {isSigned ? 'Waiver Signed' : 'Sign Waiver'}
                 </button>
+                {isSigned && <button className="w-full py-2 px-4 mt-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white" onClick={goToConfirm}>Continue</button>}
             </div>
         </div>
     );

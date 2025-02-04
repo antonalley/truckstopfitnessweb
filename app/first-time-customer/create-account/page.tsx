@@ -8,11 +8,13 @@ const CreateAccountPage = () => {
     const [dob, setDob] = useState('');
     const [photo, setPhoto] = useState<File | null>(null);
 
+    let search = new URLSearchParams(window.location.search);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // Add your submit logic here
         // redirect to waiver page
-
+        search.get('pricing') ? window.location.href = `/first-time-customer/create-account/waiver?pricing=${search.get('pricing')}` :
         window.location.href = '/first-time-customer/create-account/waiver';
         console.log('Form submitted:', { name, phone, dob, photo });
     };
