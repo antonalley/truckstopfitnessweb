@@ -1,22 +1,29 @@
+'use client';
+
+
 
 export default function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <div className="text-6xl bold text-center w-full">
-          Truck Stop Fitness  
-        </div> 
-        <div className="text-center">
-          If you are a trucker, and are into fitness, we would love your feedback!<br></br><br></br>
-          We want to create micro-gyms at truck stops <br></br>so truckers can catch a good break from sitting all day!
-        </div> 
-        <div className="flex flex-col items-center w-full">
-        <a href="https://forms.gle/oyngNsLpGQ4FBzzD8" target="_blank">
-          <div className="bg-blue-800 p-4 rounded-xl text-center">
-            Fill out this form
-          </div>
-        </a>    
-        </div>  
+        <div className="flex justify-center w-full">
+          <img src="/logo.png" alt="Truck Stop Fitness" className="w-3/4 sm:w-1/2" />
+        </div>
+         
+        <div className="flex flex-col gap-4 w-full items-center">
+          <button 
+            onClick={() => window.location.href = '/first-time-customer'} 
+            className="w-full px-4 py-8 bg-blue-500 text-white text-2xl rounded hover:bg-blue-700"
+          >
+            First Time Customer
+          </button>
+          <button 
+            onClick={() => window.location.href = '/returning-customer'} 
+            className="w-full px-4 py-8 bg-green-500 text-white text-2xl rounded hover:bg-green-700"
+          >
+            Returning Customer
+          </button>
+        </div>
       </main>
     </div>
   );
