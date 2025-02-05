@@ -13,13 +13,13 @@ export default function Home() {
          
         <div className="flex flex-col gap-4 w-full items-center">
           <button 
-            onClick={() => router.push('/first-time-customer')} 
+            onClick={() => router.push('/sign-up')} 
             className="w-full px-4 py-8 bg-blue-500 text-white text-2xl rounded hover:bg-blue-700"
           >
             First Time Customer
           </button>
           <button 
-            onClick={() => router.push('/returning-customer')} 
+            onClick={() => router.push('/sign-in')} 
             className="w-full px-4 py-8 bg-green-500 text-white text-2xl rounded hover:bg-green-700"
           >
             Returning Customer
