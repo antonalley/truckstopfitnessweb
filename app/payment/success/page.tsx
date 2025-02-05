@@ -1,8 +1,12 @@
 "use client"
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 const PaymentSuccessPage = () => {
-    let search = new URLSearchParams(window.location.search);
+    const search = useSearchParams();
     const type = search.get('pricing');
+    const router = useRouter();
 
     const isSubscription = type === 'monthly-subscription';
 
@@ -13,7 +17,7 @@ const PaymentSuccessPage = () => {
                 {isSubscription ? 'Thank you for subscribing!' : 'Thank you for your one-time payment!'}
             </p>
             <button
-                onClick={() => window.location.href = '/qr-code'}
+                onClick={() => router.push('/qr-code')}
                 className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300"
             >
                 Get QR Code to Enter
@@ -22,4 +26,14 @@ const PaymentSuccessPage = () => {
     );
 };
 
-export default PaymentSuccessPage;
+const Wrapper: React.FC = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <PaymentSuccessPage />
+        </Suspense>
+    )
+}
+
+
+
+export default Wrapper;

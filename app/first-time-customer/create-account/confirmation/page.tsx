@@ -1,5 +1,7 @@
 "use client";
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { Suspense } from 'react';
+import { useSearchParams } from "next/navigation";
 
 interface ConfirmationProps {
     firstName: string;
@@ -7,20 +9,37 @@ interface ConfirmationProps {
     email: string;
     phone: string;
     address: string;
-    onConfirms: () => void;
+    onConfirm: () => void;
     onEdit: () => void;
 }
 
-const ConfirmationPage: React.FC<ConfirmationProps> = ({ firstName, lastName, email, phone, address, onConfirms, onEdit }) => {
-    let onConfirm = () => {
-        let search = new URLSearchParams(window.location.search);
-        let pricing = search.get('pricing');
+const ConfirmationPage: React.FC = () => {
+    const router = useRouter();
+    const search = useSearchParams();
+    const pricing = search.get('pricing');
+
+    const onConfirm = () => {
         if (pricing === 'one-time-use') {
-            window.open('https://buy.stripe.com/test_5kA6ov8Li7Tb1lmaEE', '_blank');
+            router.push('https://buy.stripe.com/test_5kA6ov8Li7Tb1lmaEE');
         } else if (pricing === 'monthly-subscription') {
-            window.open('https://buy.stripe.com/test_cN29AH9Pm2yR9RSbIJ', '_blank');
+            router.push('https://buy.stripe.com/test_cN29AH9Pm2yR9RSbIJ');
         }
-    }
+    };
+
+    return (
+        <Confirmation 
+            firstName="John" 
+            lastName="Doe" 
+            email="x.x@x.com" 
+            phone="1234567890" 
+            address="123 Main St" 
+            onConfirm={onConfirm} 
+            onEdit={() => {}} 
+        />
+    );
+};
+
+const Confirmation: React.FC<ConfirmationProps> = ({ firstName, lastName, email, phone, address, onConfirm, onEdit }) => {
     return (
         <div className="max-w-md mx-auto p-4 bg-white shadow-md rounded-lg text-black">
             <h1 className="text-2xl font-bold mb-4">Confirm Your Information</h1>
@@ -39,4 +58,14 @@ const ConfirmationPage: React.FC<ConfirmationProps> = ({ firstName, lastName, em
     );
 };
 
-export default ConfirmationPage;
+const Wrapper: React.FC = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ConfirmationPage />
+        </Suspense>
+    )
+}
+
+
+
+export default Wrapper;

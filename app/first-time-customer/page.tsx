@@ -1,14 +1,16 @@
 "use client"
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 const PricingOptions: React.FC = () => {
+    const router = useRouter();
     const handleOneTimeUseClick = () => {
-        window.location.href = '/first-time-customer/create-account?pricing=one-time-use';
+        router.push('/first-time-customer/create-account?pricing=one-time-use');
     };
 
     const handleMonthlySubscriptionClick = () => {
-        window.location.href = '/first-time-customer/create-account?pricing=monthly-subscription';
+        router.push('/first-time-customer/create-account?pricing=monthly-subscription');
     };
 
     return (

@@ -1,8 +1,14 @@
 "use client";
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+
+
 
 const WaiverPage: React.FC = () => {
     const [isSigned, setIsSigned] = useState(false);
+    const router = useRouter();
+    const search= useSearchParams();
 
     const handleSignWaiver = () => {
         setIsSigned(true);
@@ -10,8 +16,7 @@ const WaiverPage: React.FC = () => {
     };
 
     const goToConfirm = () => {
-        let search = new URLSearchParams(window.location.search);
-        window.location.href = '/first-time-customer/create-account/confirmation?pricing=' + search.get('pricing');
+        router.push('/first-time-customer/create-account/confirmation?pricing=' + search.get('pricing'));
     }
 
     return (
@@ -47,5 +52,14 @@ const WaiverPage: React.FC = () => {
     );
 };
 
+const Wrapper: React.FC = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <WaiverPage />
+        </Suspense>
+    )
+}
 
-export default WaiverPage;
+
+
+export default Wrapper;

@@ -1,21 +1,26 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 const CreateAccountPage = () => {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [dob, setDob] = useState('');
     const [photo, setPhoto] = useState<File | null>(null);
+    const router = useRouter();
+    const search = useSearchParams();
 
-    let search = new URLSearchParams(window.location.search);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // Add your submit logic here
         // redirect to waiver page
-        search.get('pricing') ? window.location.href = `/first-time-customer/create-account/waiver?pricing=${search.get('pricing')}` :
-        window.location.href = '/first-time-customer/create-account/waiver';
+        const pricing = search.get('pricing');
+        router.push(pricing 
+            ? `/first-time-customer/create-account/waiver?pricing=${pricing}` 
+            : '/first-time-customer/create-account/waiver');
         console.log('Form submitted:', { name, phone, dob, photo });
     };
 
@@ -100,4 +105,14 @@ const CreateAccountPage = () => {
     );
 };
 
-export default CreateAccountPage;
+const Wrapper: React.FC = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <CreateAccountPage />
+        </Suspense>
+    )
+}
+
+
+
+export default Wrapper;
