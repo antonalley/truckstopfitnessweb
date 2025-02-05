@@ -10,11 +10,12 @@ const WaiverPage: React.FC = () => {
     };
 
     const goToConfirm = () => {
-        window.location.href = '/first-time-customer/create-account/confirmation';
+        let search = new URLSearchParams(window.location.search);
+        window.location.href = '/first-time-customer/create-account/confirmation?pricing=' + search.get('pricing');
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4 text-black">
             <div className="bg-white shadow-md rounded-lg p-6 max-w-lg w-full">
                 <h1 className="text-2xl font-bold mb-4 text-center">Waiver Agreement</h1>
                 <p className="mb-4 text-center">Please read and sign the waiver below:</p>
@@ -24,7 +25,7 @@ const WaiverPage: React.FC = () => {
                     </p>
                 </div>
                 <div className="mb-4">
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <label htmlFor="name" className="block text-sm font-medium mb-2">Full Name</label>
                     <input 
                         type="text" 
                         id="name" 

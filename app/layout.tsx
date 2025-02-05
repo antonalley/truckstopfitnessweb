@@ -28,7 +28,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="max-h-screen flex flex-col">
+          <header className="bg-gray-800 text-white p-4">
+            <h1 className="text-2xl font-bold">Truck Stop Fitness: UNDER DEVELOPMENT</h1>
+          </header>
+          <div>
+            {children}
+          </div>
+        </div>
       </body>
     </html>
   );
