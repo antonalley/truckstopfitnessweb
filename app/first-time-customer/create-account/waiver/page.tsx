@@ -26,7 +26,18 @@ const WaiverPage: React.FC = () => {
                 <p className="mb-4 text-center">Please read and sign the waiver below:</p>
                 <div className="waiver-text bg-gray-50 p-4 rounded-lg mb-4">
                     <p>
-                        [Insert waiver text here]
+                    <p>
+                        By signing this waiver, I acknowledge that I am voluntarily participating in physical exercise activities at the micro-gym provided by TruckStopFitness. I understand that there will not be an employee present to supervise or assist with my workouts.
+                    </p>
+                    <p>
+                        I am aware that physical exercise can be strenuous and subject to risk of serious injury. I agree that I am voluntarily participating in these activities and assume all risks of injury, illness, or death.
+                    </p>
+                    <p>
+                        I hereby release, discharge, and hold harmless TruckStopFitness, its owners, agents, and employees from any and all claims, demands, damages, rights of action, or causes of action, present or future, arising out of or connected with my participation in any exercise program, including any injuries resulting therefrom.
+                    </p>
+                    <p>
+                        I acknowledge that I have read this waiver and fully understand its terms. I understand that I am giving up substantial rights, including my right to sue. I acknowledge that I am signing this waiver freely and voluntarily, and intend by my signature to be a complete and unconditional release of all liability to the greatest extent allowed by law.
+                    </p>
                     </p>
                 </div>
                 <div className="mb-4">
