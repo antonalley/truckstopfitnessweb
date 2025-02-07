@@ -8,6 +8,8 @@ export default function Page() {
   const { isLoaded, signUp, setActive } = useSignUp()
   const [verifying, setVerifying] = React.useState(false)
   const [phone, setPhone] = React.useState('')
+  const [firstName, setFirstName] = React.useState('')
+  const [lastName, setLastName] = React.useState('')
   const [code, setCode] = React.useState('')
   const router = useRouter()
 
@@ -18,8 +20,18 @@ export default function Page() {
 
     try {
       // Start the sign-up process using the phone number method
+      const cleanedPhone = phone.replace(/\D/g, '');
+
       await signUp.create({
         phoneNumber: phone,
+        firstName: firstName,
+        lastName: lastName,
+        unsafeMetadata: {
+          "firstSignup": {
+            "location": "SLC-SAPP", // TODO: get from url params?
+            "date": new Date().toISOString(),
+          }
+        }
       })
 
       // Start the verification - a SMS message will be sent to the
@@ -51,7 +63,7 @@ export default function Page() {
       if (signUpAttempt.status === 'complete') {
         await setActive({ session: signUpAttempt.createdSessionId })
 
-        router.push('/dashboard')
+        router.push('/first-time-customer')
       } else {
         // If the status is not complete, check why. User may need to
         // complete further steps.
@@ -85,18 +97,37 @@ export default function Page() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      
       <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Sign up</h1>
       <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Enter phone number</label>
-        <input
-          value={phone}
-          id="phone"
-          name="phone"
-          type="tel"
-          onChange={(e) => setPhone(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 mb-4"
-        />
-        <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600">Continue</button>
+      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">First Name</label>
+      <input
+        value={firstName}
+        id="firstName"
+        name="firstName"
+        type="text"
+        onChange={(e) => setFirstName(e.target.value)}
+        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 mb-4"
+      />
+      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Last Name</label>
+      <input
+        value={lastName}
+        id="lastName"
+        name="lastName"
+        type="text"
+        onChange={(e) => setLastName(e.target.value)}
+        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 mb-4"
+      />
+      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Enter phone number</label>
+      <input
+        value={phone}
+        id="phone"
+        name="phone"
+        type="tel"
+        onChange={(e) => setPhone(e.target.value)}
+        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 mb-4"
+      />
+      <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600">Continue</button>
       </form>
     </div>
   )

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
 
 interface DashboardProps {
     userName: string;
@@ -33,7 +34,12 @@ const Dashboard: React.FC<DashboardProps> = ({ userName, hasSubscription }) => {
 
 
 const Wrapper: React.FC = () => {
-    return <Dashboard userName="John Doe" hasSubscription={false} />;
+    const {user} = useUser()
+    if (!user) {
+        return <div>Loading...</div>;
+    }
+
+    return <Dashboard userName={`${user.firstName} ${user.lastName}`} hasSubscription={false} />;
 }
 
 
