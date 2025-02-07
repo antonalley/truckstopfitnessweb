@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import React, { Suspense } from 'react';
 import { useSearchParams } from "next/navigation";
+import useAuth from '@/hooks/useAuth';
 
 interface ConfirmationProps {
     firstName: string;
@@ -17,12 +18,13 @@ const ConfirmationPage: React.FC = () => {
     const router = useRouter();
     const search = useSearchParams();
     const pricing = search.get('pricing');
+    const { user } = useAuth();
 
     const onConfirm = () => {
         if (pricing === 'one-time-use') {
-            router.push('https://buy.stripe.com/test_5kA6ov8Li7Tb1lmaEE');
+            router.push(`https://buy.stripe.com/test_5kA6ov8Li7Tb1lmaEE?client_reference_id=${user?.uid}`);
         } else if (pricing === 'monthly-subscription') {
-            router.push('https://buy.stripe.com/test_cN29AH9Pm2yR9RSbIJ');
+            router.push(`https://buy.stripe.com/test_cN29AH9Pm2yR9RSbIJ?client_reference_id=${user?.uid}`);
         }
     };
 
