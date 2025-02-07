@@ -6,11 +6,11 @@ import { useRouter } from 'next/navigation';
 const PricingOptions: React.FC = () => {
     const router = useRouter();
     const handleOneTimeUseClick = () => {
-        router.push('/first-time-customer/create-account?pricing=one-time-use');
+        router.push('/first-time-customer/sign-up?pricing=one-time-use');
     };
 
     const handleMonthlySubscriptionClick = () => {
-        router.push('/first-time-customer/create-account?pricing=monthly-subscription');
+        router.push('/first-time-customer/sign-up?pricing=monthly-subscription');
     };
 
     return (

@@ -3,25 +3,45 @@
 import React, { Suspense, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import { doc, setDoc } from "firebase/firestore"; 
+import { db } from '@/firebase.config';
+import useAuth from '@/hooks/useAuth';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const CreateAccountPage = () => {
     const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
     const [dob, setDob] = useState('');
     const [photo, setPhoto] = useState<File | null>(null);
     const router = useRouter();
     const search = useSearchParams();
+    const { user } = useAuth();
 
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         // Add your submit logic here
+        if (user){
+            const didUpload = await uploadPhoto(photo, user.uid);
+            if (didUpload) {
+                const docref = doc(db, "user-information", user.uid);
+                await setDoc(docref, {
+                    name: name,
+                    dob: dob,
+                    photo: photo ? photo.name : null,
+                    isWaiverSigned: false
+                });
+
+                const pricing = search.get('pricing');
+                router.push(pricing 
+                    ? `/first-time-customer/create-account/waiver?pricing=${pricing}` 
+                    : '/first-time-customer/create-account/waiver');
+                console.log('Form submitted:', { name, dob, photo });
+            }
+            
+        }
+        
         // redirect to waiver page
-        const pricing = search.get('pricing');
-        router.push(pricing 
-            ? `/first-time-customer/create-account/waiver?pricing=${pricing}` 
-            : '/first-time-customer/create-account/waiver');
-        console.log('Form submitted:', { name, phone, dob, photo });
+        
     };
 
     const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,23 +68,6 @@ const CreateAccountPage = () => {
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             required
                         />
-                    </div>
-                    <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                            Phone Number
-                        </label>
-                        <input
-                            type="tel"
-                            id="phone"
-                            name="phone"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            required
-                        />
-                        <p className="mt-2 text-sm text-gray-500">
-                            You consent that your phone number will only be used to send a verification text.
-                        </p>
                     </div>
                     <div>
                         <label htmlFor="dob" className="block text-sm font-medium text-gray-700">
@@ -119,3 +122,20 @@ const Wrapper: React.FC = () => {
 
 
 export default Wrapper;
+
+
+async function uploadPhoto(photo: File | null, uid: string): Promise<string | null> {
+    if (!photo) return null;
+
+    const storage = getStorage();
+    const storageRef = ref(storage, `profile-photos/${uid}/${photo.name}`);
+    
+    try {
+        const snapshot = await uploadBytes(storageRef, photo);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        return downloadURL;
+    } catch (error) {
+        console.error("Error uploading photo:", error);
+        return null;
+    }
+}
