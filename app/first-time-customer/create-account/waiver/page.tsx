@@ -31,7 +31,7 @@ const WaiverPage: React.FC = () => {
     };
 
     const goToConfirm = () => {
-        router.push('/first-time-customer/create-account/confirmation?pricing=' + search.get('pricing'));
+        router.push('/first-time-customer/create-account/confirmation?' + search.toString());
     }
 
     return (

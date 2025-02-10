@@ -8,8 +8,7 @@ const SignUpPage = () => {
     const search = useSearchParams();
     const router = useRouter();
     const NextStep = () => {
-        const pricing = search.get('pricing');
-        router.push(`/first-time-customer/create-account?pricing=${pricing}`);
+        router.push(`/first-time-customer/create-account?` + search.toString());
     }
   return (
     <div>

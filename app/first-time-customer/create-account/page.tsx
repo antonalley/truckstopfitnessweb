@@ -31,10 +31,7 @@ const CreateAccountPage = () => {
                     isWaiverSigned: false
                 });
 
-                const pricing = search.get('pricing');
-                router.push(pricing 
-                    ? `/first-time-customer/create-account/waiver?pricing=${pricing}` 
-                    : '/first-time-customer/create-account/waiver');
+                router.push(`/first-time-customer/create-account/waiver?${search.toString()}`);
                 console.log('Form submitted:', { name, dob, photo });
             }
             

@@ -1,16 +1,17 @@
 "use client"
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const PricingOptions: React.FC = () => {
     const router = useRouter();
+    const search = useSearchParams();
     const handleOneTimeUseClick = () => {
-        router.push('/first-time-customer/sign-up?pricing=one-time-use');
+        router.push('/first-time-customer/sign-up?pricing=one-time-use&' + search.toString());
     };
 
     const handleMonthlySubscriptionClick = () => {
-        router.push('/first-time-customer/sign-up?pricing=monthly-subscription');
+        router.push('/first-time-customer/sign-up?pricing=monthly-subscription&' + search.toString());
     };
 
     return (
