@@ -7,9 +7,11 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from '@/firebase.config';
 import useAuth from '@/hooks/useAuth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import NavBar from '@/components/NavBar';
 
 const CreateAccountPage = () => {
-    const [name, setName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [dob, setDob] = useState('');
     const [photo, setPhoto] = useState<File | null>(null);
     const router = useRouter();
@@ -25,7 +27,8 @@ const CreateAccountPage = () => {
             if (didUpload) {
                 const docref = doc(db, "user-information", user.uid);
                 await setDoc(docref, {
-                    name: name,
+                    firstName: firstName,
+                    lastName: lastName,
                     dob: dob,
                     photo: photo ? photo.name : null,
                     isWaiverSigned: false
@@ -48,20 +51,34 @@ const CreateAccountPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 text-black">
+        <div className="h-[100%] flex items-center justify-center bg-gray-100 text-black">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Enter Information</h2>
                 <form className="space-y-4" onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                            Name
+                            First Name
                         </label>
                         <input
                             type="text"
-                            id="name"
-                            name="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            id="firstName"
+                            name="firstName"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                            Last Name
+                        </label>
+                        <input
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             required
                         />
@@ -111,6 +128,7 @@ const CreateAccountPage = () => {
 const Wrapper: React.FC = () => {
     return (
         <Suspense fallback={<div>Loading...</div>}>
+            <NavBar />
             <CreateAccountPage />
         </Suspense>
     )

@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import PhoneSignUp from '../../../components/PhoneSignUp';
 import { useSearchParams } from "next/navigation";
 import { Suspense } from 'react';
+import NavBar from '@/components/NavBar';
 
 const SignUpPage = () => {
     const search = useSearchParams();
@@ -11,9 +12,10 @@ const SignUpPage = () => {
         router.push(`/first-time-customer/create-account?` + search.toString());
     }
   return (
-    <div>
+    <>
+    <NavBar />
       <PhoneSignUp onSuccess={NextStep}/>
-    </div>
+    </>
   );
 };
 

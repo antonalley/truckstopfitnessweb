@@ -2,15 +2,15 @@
 import { useRouter } from 'next/navigation';
 import React, { Suspense } from 'react';
 import { useSearchParams } from "next/navigation";
-import useAuth from '@/hooks/useAuth';
 import { loadStripe } from '@stripe/stripe-js';
+import useUserData from '@/hooks/useUserData';
+import { TTSF_Pricing } from '@/types/tsf_types';
+import NavBar from '@/components/NavBar';
 
 interface ConfirmationProps {
     firstName: string;
     lastName: string;
-    email: string;
     phone: string;
-    address: string;
     onEdit: () => void;
     goToPay: (e: React.FormEvent) => void;
 }
@@ -24,13 +24,13 @@ const stripePromise = loadStripe(
 const ConfirmationPage: React.FC = () => {
     const router = useRouter();
     const search = useSearchParams();
-    const pricing = search.get('pricing');
-    const container_location = search.get('container_location');
-    const { user } = useAuth();
+    const pricing = search.get('pricing') as TTSF_Pricing | null;
+    const container_location = search.get('location');
+    const { userData } = useUserData();
 
     const goToPay = async (e: React.FormEvent) => {
         e.preventDefault();
-        const url =`/api/complete-purchase?pricing=${pricing}&uid=${user?.uid}&container_location=${container_location}`;
+        const url =`/api/complete-purchase?pricing=${pricing}&uid=${userData?.uid}&location=${container_location}`;
         // post to url, and follow the redirect url it returns if no error
         const response = await fetch(url, { method: 'POST' });
         const data = await response.json();
@@ -43,18 +43,16 @@ const ConfirmationPage: React.FC = () => {
 
     return (
         <Confirmation 
-            firstName="John" 
-            lastName="Doe" 
-            email="x.x@x.com" 
-            phone="1234567890" 
-            address="123 Main St" 
+            firstName={userData?.firstName ?? ''} 
+            lastName={userData?.lastName ?? ''}
+            phone={userData?.phone ?? ''}
             onEdit={() => {}} 
             goToPay={goToPay}
         />
     );
 };
 
-const Confirmation: React.FC<ConfirmationProps> = ({ firstName, lastName, email, phone, address, onEdit, goToPay }) => {
+const Confirmation: React.FC<ConfirmationProps> = ({ firstName, lastName, phone, onEdit, goToPay }) => {
     
     
     
@@ -64,12 +62,10 @@ const Confirmation: React.FC<ConfirmationProps> = ({ firstName, lastName, email,
             <div className="mb-4">
                 <p><strong>First Name:</strong> {firstName}</p>
                 <p><strong>Last Name:</strong> {lastName}</p>
-                <p><strong>Email:</strong> {email}</p>
                 <p><strong>Phone:</strong> {phone}</p>
-                <p><strong>Address:</strong> {address}</p>
             </div>
             <div className="flex justify-between">
-                <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400" onClick={onEdit}>Edit</button>
+                {/* <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400" onClick={onEdit}>Edit</button> */}
                 <form onSubmit={goToPay}>
                     <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Confirm & Pay</button>
                 </form>
@@ -81,6 +77,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({ firstName, lastName, email,
 const Wrapper: React.FC = () => {
     return (
         <Suspense fallback={<div>Loading...</div>}>
+            <NavBar />
             <ConfirmationPage />
         </Suspense>
     )

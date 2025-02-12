@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { db } from "@/lib/firebaseAdmin";
+import { TTSF_Payment, TTSF_Pricing } from "@/types/tsf_types";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -37,26 +38,31 @@ export async function POST(req: NextRequest) {
         const payid = checkoutSession.id;
         const uid = checkoutSession.client_reference_id;
         const location = checkoutSession.metadata?.location;
-        const pricing = checkoutSession.metadata?.pricing;
+        const pricing = checkoutSession.metadata
+          ?.pricing as TTSF_Pricing | null;
+        if (pricing === null) {
+          throw new Error("Pricing is required");
+        }
         // TODO: check if one time payment or subscription
-        const data = {
-          payid: payid,
-          date: new Date(),
-          location: location,
-          pricing: pricing,
-          amount: checkoutSession.amount_total,
-          created: checkoutSession.created,
-          currency: checkoutSession.currency,
-          payment_status: checkoutSession.payment_status,
-          status: checkoutSession.status,
-        };
-        console.log("Data", data);
-        if (uid) {
+        if (payid && uid && location && pricing) {
+          const data: TTSF_Payment = {
+            payid: payid,
+            date: new Date(checkoutSession.created * 1000),
+            location: location,
+            pricing: pricing,
+            amount: checkoutSession.amount_total!,
+            currency: checkoutSession.currency!,
+            payment_status: checkoutSession.payment_status,
+            status: checkoutSession.status,
+          };
+          console.log("Data", data);
           await db
             .collection("user-information")
             .doc(uid)
             .collection("check-ins")
             .add(data);
+        } else {
+          console.error("problem some expected data is not there from stripe");
         }
       }
 

@@ -1,3 +1,4 @@
+import { TTSF_Pricing } from "@/types/tsf_types";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -7,9 +8,12 @@ export async function POST(req: NextRequest) {
   try {
     console.log("Request headers: ", req.headers.get("origin"));
     const { searchParams } = new URL(req.url);
-    const pricing = searchParams.get("pricing");
+    const pricing = searchParams.get("pricing") as TTSF_Pricing | null;
+    if (pricing === null) {
+      throw new Error("Pricing is required");
+    }
     console.log("Pricing", pricing);
-    const container_location = searchParams.get("container_location");
+    const container_location = searchParams.get("location");
     let price_id = "";
     let mode: Stripe.Checkout.SessionCreateParams.Mode = "payment";
     if (pricing === "one-time-use") {
@@ -36,8 +40,12 @@ export async function POST(req: NextRequest) {
       ],
       client_reference_id: uid,
       mode: mode,
-      success_url: `${req.headers.get("origin")}/?success=true`,
-      cancel_url: `${req.headers.get("origin")}/?canceled=true`,
+      success_url: `${req.headers.get(
+        "origin"
+      )}/payment?success=true&pricing=${pricing}&location=${container_location}`,
+      cancel_url: `${req.headers.get(
+        "origin"
+      )}/payment?success=false&pricing=${pricing}&location=${container_location}`,
       automatic_tax: { enabled: true },
       metadata: { pricing: pricing, location: container_location },
     });
@@ -57,6 +65,7 @@ export async function POST(req: NextRequest) {
 // To handle a GET request to /api
 export async function GET(request: NextRequest) {
   // Do whatever you want
+  console.log(request);
   // res.status(405).json({ error: "Method not allowed" });
   return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
 }

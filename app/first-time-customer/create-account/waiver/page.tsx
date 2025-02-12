@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { db } from '@/firebase.config';
 import { updateDoc, doc } from 'firebase/firestore';
 import useAuth from '@/hooks/useAuth';
+import NavBar from '@/components/NavBar';
 
 
 const WaiverPage: React.FC = () => {
@@ -35,12 +36,11 @@ const WaiverPage: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4 text-black">
+        <div className="h-[100%] flex flex-col items-center justify-center bg-gray-100 p-4 text-black">
             <div className="bg-white shadow-md rounded-lg p-6 max-w-lg w-full">
                 <h1 className="text-2xl font-bold mb-4 text-center">Waiver Agreement</h1>
                 <p className="mb-4 text-center">Please read and sign the waiver below:</p>
-                <div className="waiver-text bg-gray-50 p-4 rounded-lg mb-4">
-                    
+                <div className="waiver-text bg-gray-50 p-4 rounded-lg mb-4 max-h-96 overflow-y-auto">
                     <p>
                         By signing this waiver, I acknowledge that I am voluntarily participating in physical exercise activities at the micro-gym provided by TruckStopFitness. I understand that there will not be an employee present to supervise or assist with my workouts.
                     </p><br/>
@@ -63,6 +63,7 @@ const WaiverPage: React.FC = () => {
                         name="name" 
                         className="w-full p-2 border border-gray-300 rounded-lg" 
                         placeholder="Enter your name" 
+                        disabled={isSigned}
                     />
                 </div>
                 <button 
@@ -72,6 +73,10 @@ const WaiverPage: React.FC = () => {
                 >
                     {isSigned ? 'Waiver Signed' : 'Sign Waiver'}
                 </button>
+                { !isSigned && <p className="text-xs text-center mt-2 text-gray-500">
+                    By clicking this button, you verify that you have read and signed this document.
+                </p>
+}
                 {isSigned && <button className="w-full py-2 px-4 mt-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white" onClick={goToConfirm}>Continue</button>}
             </div>
         </div>
@@ -81,6 +86,7 @@ const WaiverPage: React.FC = () => {
 const Wrapper: React.FC = () => {
     return (
         <Suspense fallback={<div>Loading...</div>}>
+            <NavBar />
             <WaiverPage />
         </Suspense>
     )

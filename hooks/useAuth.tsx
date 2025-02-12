@@ -27,11 +27,11 @@ const useAuth = () => {
     return () => unsubscribe();
   }, [router]);
 
-  useEffect(() => {
-    if (!loading && !authenticated) {
-      router.replace('/');
-    }
-  }, [loading, authenticated, router]);
+  // useEffect(() => {
+  //   if (!loading && !authenticated) {
+  //     router.replace('/');
+  //   }
+  // }, [loading, authenticated, router]);
 
   return { loading, authenticated, user };
 };
