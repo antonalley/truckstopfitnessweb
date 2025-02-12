@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
           await db
             .collection("user-information")
             .doc(uid)
-            .collection("check-ins")
+            .collection("payments")
             .add(data);
         } else {
           console.error("problem some expected data is not there from stripe");
