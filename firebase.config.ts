@@ -9,15 +9,9 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyC-ExXW9DHZ9hldObleZBqPAV48UtB_NUg",
-  authDomain: "truck-stop-fitness.firebaseapp.com",
-  projectId: "truck-stop-fitness",
-  storageBucket: "truck-stop-fitness.firebasestorage.app",
-  messagingSenderId: "25002929423",
-  appId: "1:25002929423:web:8ffc959085cdf72b05a27a",
-  measurementId: "G-MDX2BCW7DJ",
-};
+const firebaseConfig = JSON.parse(
+  process.env.NEXT_PUBLIC_FIREBASE_CONFIG || "{}"
+);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 
-const serviceAccount = require("../truck-stop-fitness-firebase-adminsdk-fbsvc-23895bb14b.json");
+const serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN as string);
 
 var app = null;
 if (admin.apps.length > 0) {
