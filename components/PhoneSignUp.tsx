@@ -65,7 +65,7 @@ const PhoneSignUp: React.FC<PhoneSignUpProps> = ({ onSuccess }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 text:black">
+    <div className="flex flex-col items-center justify-center h-[100%] bg-gray-100 p-4 text:black">
       <h2 className="text-2xl font-bold mb-4">Phone Sign Up</h2>
       <div id="recaptcha-container"></div> {/* Container for reCAPTCHA */}
       <input
