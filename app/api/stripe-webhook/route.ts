@@ -61,8 +61,19 @@ export async function POST(req: NextRequest) {
             .doc(uid)
             .collection("payments")
             .add(data);
+          console.log("Successful update of data on firebase");
         } else {
-          console.error("problem some expected data is not there from stripe");
+          console.error("TSF: Data incorrect. something is missing");
+          console.error(
+            "payid: ",
+            payid,
+            "uid: ",
+            uid,
+            "location: ",
+            location,
+            "pricing: ",
+            pricing
+          );
         }
       }
 
