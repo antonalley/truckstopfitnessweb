@@ -28,6 +28,12 @@ import { Suspense } from 'react';
           >
             Returning Customer
           </button>
+          <button 
+            onClick={() => router.push('/survey')} 
+            className="w-full px-4 py-8 bg-gradient-to-r from-purple-400 to-purple-600 text-white text-2xl rounded-lg shadow-md hover:from-purple-500 hover:to-purple-700"
+          >
+            Take Our Survey
+          </button>
         </div>
       </main>
     </div>
